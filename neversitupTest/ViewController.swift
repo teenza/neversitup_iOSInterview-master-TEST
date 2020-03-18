@@ -120,6 +120,7 @@ class ViewController: UIViewController {
     
         return false
     }
+
     
 
 
@@ -133,13 +134,37 @@ extension ViewController : UITextFieldDelegate{
         }else{
             textField.textColor = UIColor.black
         }
+        
+        //check amount
+        if textField == amountTextField { // Switch focus to other text field
+            if let valueString = textField.text,
+                let value = Float(valueString){
+                if value <= 0 {
+                    textField.text = "1"
+                }
+            }
+        }
     }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         
+        if(checkOverspend(textField: textField)){
+            textField.textColor = UIColor.red
+        }else{
+            textField.textColor = UIColor.black
+        }
+        
+        //amount keyboad next
         if textField == amountTextField { // Switch focus to other text field
             discountTextField.becomeFirstResponder()
+            //check amount
+            if textField.text!.isEmpty {
+                    textField.text = "1"
+                }
+            
         }
+        
+
         
          return true
     }
@@ -147,11 +172,21 @@ extension ViewController : UITextFieldDelegate{
     func textFieldDidEndEditing(_ textField: UITextField) {
 
         if textField == discountTextField {  // OR with Tag like textfield.tag == 45
+            //discountTextField keyboad done
+            if textField == discountTextField { // Switch focus to other text field
+                discountTextField.becomeFirstResponder()
+                //check amount
+                if textField.text!.isEmpty {
+                        textField.text = "0"
+                    }
+                
+            }
             calculateValue()
         }
         if textField == subTotalTextField {  // OR with Tag like textfield.tag == 45
           calculateNew()
         }
+        
       
     }
     
